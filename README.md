@@ -1,13 +1,13 @@
 # Documentation Navigator
 
-A lightweight, offline-friendly Markdown documentation viewer with search, generated section navigation, reading progress, responsive layout, and Lua syntax highlighting.
+A lightweight, offline-friendly Markdown documentation viewer with search, generated section navigation, reading progress, responsive layout, and Luau syntax highlighting.
 
 ## Edit the documentation
 
-Put your content in [`documentation.md`](documentation.md). Use Markdown headings to create the outline. Fenced blocks labeled `lua` receive syntax highlighting:
+Put your content in [`documentation.md`](documentation.md). Use Markdown headings to create the outline. Fenced blocks labeled `luau` receive Roblox Studio-style syntax highlighting:
 
 ```markdown
-```lua
+```luau
 local answer = 42
 ```
 ```
@@ -24,4 +24,10 @@ Then open `http://localhost:8000`.
 
 ## Deploy
 
-Deploy the repository as static files to GitHub Pages, Netlify, Cloudflare Pages, or any other static host. No build step, backend, database, or network dependency is required.
+GitHub Pages deployment is configured in `.github/workflows/pages.yml`. Push the repository to the `main` branch, then in the repository settings choose **Pages > Build and deployment > Source: GitHub Actions**. Each push to `main` will publish the site automatically.
+
+The expected GitHub Pages URL is:
+
+`https://neurospawn.github.io/Defshock2-Item-Manager-Documentation/`
+
+No build step, backend, database, or network dependency is required.

@@ -1,5 +1,3 @@
-# ItemManager — Complete Documentation
-
 ## Table of Contents
 
 1. [Overview & Architecture](#1-overview--architecture)
@@ -116,7 +114,7 @@ WeaponTool (Tool, tagged "Weapon")
 
 A simple ModuleScript returning a CFrame that adjusts the weapon's position in the character's hand:
 
-```lua
+```luau
 return CFrame.new(0, -0.1, -0.2)
 ```
 
@@ -456,7 +454,7 @@ ReplicatedStorage.weapons.MyGun (Tool)
 
 **3. Write the toolSettings ModuleScript:**
 
-```lua
+```luau
 return {
     toolType = "gun";
     toolClass = "assault rifle";
@@ -573,7 +571,7 @@ return {
 
 **4. Create the `offset` ModuleScript:**
 
-```lua
+```luau
 return CFrame.new(0, -0.1, -0.2)
 ```
 
@@ -583,7 +581,7 @@ return CFrame.new(0, -0.1, -0.2)
 
 For a pump shotgun, add these settings:
 
-```lua
+```luau
     manualChamberingEnabled = true;
     firingChamberShotgun = true;
     firingChamberTime = 1;
@@ -600,7 +598,7 @@ For a pump shotgun, add these settings:
 
 ### Bolt-Action Sniper-Specific Additions
 
-```lua
+```luau
     manualChamberingEnabled = true;
     firingChamberShotgun = false; -- chamber per mag, not per shot
     firingChamberTime = 1.5;
@@ -630,7 +628,7 @@ ReplicatedStorage.weapons.MyMelee (Tool, tagged "Weapon")
 
 ### toolSettings
 
-```lua
+```luau
 return {
     toolType = "melee";
     toolClass = "blunt"; -- or "blade"
@@ -733,7 +731,7 @@ ReplicatedStorage.weapons.MyGrenade (Tool, tagged "Weapon")
 
 ### toolSettings
 
-```lua
+```luau
 return {
     toolType = "grenade";
     toolClass = "throwable";
@@ -811,7 +809,7 @@ Utility items (stims, medkits, etc.) use the `customActionTable` and `customSour
 
 ### toolSettings
 
-```lua
+```luau
 return {
     toolType = "item";
     toolClass = "utility";
@@ -902,7 +900,7 @@ ReplicatedStorage.WeaponAttachments
 
 ### AttachmentData Module Structure
 
-```lua
+```luau
 return {
     attachmentInfo = {
         description = "Extended magazine for increased capacity",
@@ -962,7 +960,7 @@ ReplicatedStorage.WeaponAttachments.MyGun
 
 **2. Write the AttachmentData:**
 
-```lua
+```luau
 return {
     attachmentInfo = {
         description = "Extended magazine (+50% capacity)",
@@ -1001,7 +999,7 @@ Weapon upgrades are permanent modifications stored in `ReplicatedStorage.WeaponU
 
 ### Upgrade Module Structure
 
-```lua
+```luau
 return {
     upgradeInfo = {
         name = "Rapid Fire",
@@ -1067,7 +1065,7 @@ The speed modifier is calculated as: `1 / (newTime / originalTime)` — so if re
 
 Animations are defined in `animationsTable` inside `toolSettings`. Each entry:
 
-```lua
+```luau
 {
     type = "fire",          -- String key used to play/stop this animation
     id = 123456789,         -- Roblox Animation ID (0 = skip)
@@ -1120,7 +1118,7 @@ Animations are defined in `animationsTable` inside `toolSettings`. Each entry:
 
 Sounds are defined in `soundsTable`:
 
-```lua
+```luau
 {
     type = "fire",       -- Key used to play this sound
     id = 123456789,      -- Roblox Sound ID
@@ -1165,7 +1163,7 @@ Multiple sounds with the same `type` are randomly selected on play.
 
 During `updateInputs()`, the ItemManager creates input bindings based on which features are enabled in `toolSettings`. Each binding is created via `bindInput()`:
 
-```lua
+```luau
 bindInput({
     mouseBind = "MouseButton1",     -- Enum.UserInputType name (or nil)
     keyBind = "R",                  -- Enum.KeyCode name (or nil)
@@ -1334,7 +1332,7 @@ Used for breaking glass/structures. Requires a secret passcode. Makes parts tran
 
 ### Configuration
 
-```lua
+```luau
 local LAG_RESILIENCE = {
     SYNC_AMMO_INTERVAL = 0.5,    -- Sync ammo every 0.5s instead of per shot
     EQUIP_TIMEOUT = 5,          -- Timeout for equip operation
@@ -1378,7 +1376,7 @@ If the server doesn't respond within `QUICK_EQUIP_WAIT` (0.5s), the system enter
 
 The `customSource` setting allows custom initialization during equip:
 
-```lua
+```luau
 customSource = function(self)
     -- self is the ItemManager instance
     -- Called after settings are loaded, before inputs are bound
@@ -1393,7 +1391,7 @@ end
 
 Animation keyframe markers can call functions on the ItemManager instance:
 
-```lua
+```luau
 -- In an animation, add a keyframe marker named "callFunction"
 -- with text "myCustomFunc"
 -- Then define it:
@@ -1430,7 +1428,7 @@ The external client script sets `self.sprinting = true/false`. When sprinting:
 ### Multiple Aim Points
 
 Weapons can have multiple aim points (e.g., iron sights + red dot + scope):
-```lua
+```luau
 aimPoints = {script.Parent.IronSights, script.Parent.RedDot, script.Parent.Scope}
 aimingFieldOfView = 50    -- iron sights
 aimingFieldOfView2 = 40   -- red dot
@@ -1470,7 +1468,7 @@ The ItemManager has comprehensive error handling:
 
 ### Minimum Viable Gun
 
-```lua
+```luau
 return {
     toolType = "gun",
     equippingTime = 1,
@@ -1518,7 +1516,7 @@ return {
 
 ### Minimum Viable Melee
 
-```lua
+```luau
 return {
     toolType = "melee",
     equippingTime = 1,
