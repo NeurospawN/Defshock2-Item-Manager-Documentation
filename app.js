@@ -7,6 +7,7 @@
     currentIndex: 0,
     query: "",
     suppressOutlineScrollUntil: 0,
+    suppressUrlUntil: 0,
   };
   var documentElement = document.getElementById("document");
   var outline = document.getElementById("outline");
@@ -325,8 +326,21 @@
       state.headings.length +
       (state.headings.length === 1 ? " section" : " sections");
   }
-  function setActive(index, scrollOutline) {
+  function updateSectionUrl(id) {
+    var hash = "#" + encodeURIComponent(id);
+    if (window.location.hash !== hash) {
+      history.replaceState(null, "", hash);
+    }
+  }
+
+  function setActive(index, scrollOutline, updateUrl, forceUrl) {
     state.currentIndex = Math.max(0, index);
+    if (
+      updateUrl !== false &&
+      (forceUrl || performance.now() >= state.suppressUrlUntil)
+    ) {
+      updateSectionUrl(state.headings[state.currentIndex].id);
+    }
     document.querySelectorAll(".outline a").forEach(function (link) {
       link.classList.toggle(
         "active",
@@ -357,7 +371,8 @@
     if (scrollOutline === false) {
       state.suppressOutlineScrollUntil = performance.now() + 1200;
     }
-    setActive(index, scrollOutline);
+    state.suppressUrlUntil = performance.now() + 1200;
+    setActive(index, scrollOutline, true, true);
     target.scrollIntoView({ behavior: behavior || "smooth", block: "start" });
     return true;
   }
@@ -365,7 +380,7 @@
   function positionAtUrlSection() {
     var hash = window.location.hash.slice(1);
     if (!hash) {
-      if (state.headings.length) setActive(0);
+      if (state.headings.length) setActive(0, undefined, false);
       return;
     }
 
