@@ -31,3 +31,7 @@ The expected GitHub Pages URL is:
 `https://neurospawn.github.io/Defshock2-Item-Manager-Documentation/`
 
 No build step, backend, database, or network dependency is required.
+
+## Discord embed image
+
+Place the supplied image in the repository root as `embed-image.jpg`. The page already includes Open Graph and Twitter card metadata for that file. After deployment, Discord may need a fresh URL or cache refresh before showing updated embed metadata.
