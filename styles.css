@@ -488,6 +488,9 @@ a {
     transform 0.2s;
   width: 42px;
 }
+.back-to-top::before {
+  backdrop-filter: blur(2px);
+}
 .back-to-top.visible {
   opacity: 1;
   pointer-events: auto;
@@ -521,7 +524,6 @@ a {
     padding: 20px 18px 55px;
   }
   .sidebar {
-    background: var(--surface);
     border: 1px solid var(--border);
     border-radius: 8px;
     display: none;
@@ -651,6 +653,7 @@ a {
 :root {
   color-scheme: dark;
   --bg: #05090d;
+  --bg-image: url("background.jpg");
   --surface: rgba(11, 18, 24, 0.9);
   --surface-raised: rgba(18, 29, 36, 0.96);
   --surface-soft: rgba(31, 43, 48, 0.9);
@@ -663,7 +666,7 @@ a {
   --accent-strong: #eaffff;
   --accent-soft: rgba(148, 239, 232, 0.13);
   --warning: #ff5c52;
-  --code-bg: #05080a;
+  --code-bg: rgba(8, 8, 8, 0.5);
   --sans: "Jura", "Trebuchet MS", sans-serif;
 }
 body.light-theme {
@@ -683,19 +686,10 @@ body.light-theme {
   --code-bg: #152023;
 }
 body {
-  background: var(--bg);
   letter-spacing: 0.025em;
   position: relative;
 }
 body::before {
-  background:
-    linear-gradient(
-      90deg,
-      rgba(4, 8, 11, 0.94),
-      rgba(4, 8, 11, 0.57) 43%,
-      rgba(4, 8, 11, 0.9)
-    ),
-    linear-gradient(135deg, #240705 0%, #071116 46%, #220a09 100%);
   content: "";
   inset: 0;
   opacity: 0.94;
@@ -704,28 +698,9 @@ body::before {
   z-index: -2;
 }
 .backdrop-art {
-  background:
-    linear-gradient(
-      90deg,
-      transparent 0 6%,
-      rgba(224, 244, 238, 0.14) 6.1% 6.3%,
-      transparent 6.4% 16%,
-      rgba(224, 244, 238, 0.1) 16.1% 16.3%,
-      transparent 16.4% 83.6%,
-      rgba(224, 244, 238, 0.1) 83.7% 83.9%,
-      transparent 84% 93.6%,
-      rgba(224, 244, 238, 0.14) 93.7% 93.9%,
-      transparent 94%
-    ),
-    linear-gradient(
-      155deg,
-      transparent 0 20%,
-      rgba(155, 232, 224, 0.1) 20.1% 20.5%,
-      transparent 20.6% 79.4%,
-      rgba(155, 232, 224, 0.1) 79.5% 79.9%,
-      transparent 80%
-    );
-  filter: blur(15px);
+  background-image: var(--bg-image);
+  background-position: center;
+  filter: blur(8px);
   inset: -4%;
   opacity: 0.62;
   pointer-events: none;
@@ -734,7 +709,7 @@ body::before {
   z-index: -1;
 }
 .topbar {
-  background: rgba(4, 9, 12, 0.84);
+  background: rgba(4, 9, 12, 1);
   height: 76px;
   backdrop-filter: blur(18px);
 }
@@ -784,6 +759,7 @@ body::before {
   border-left-color: var(--warning);
 }
 .main-content {
+  backdrop-filter: blur(16px);
   background: rgba(5, 9, 13, 0.34);
   border: 1px solid rgba(118, 147, 153, 0.28);
   box-shadow: var(--shadow);
@@ -994,10 +970,10 @@ body::before {
 }
 .backdrop-art {
   opacity: 0.42;
-  filter: blur(18px) grayscale(1);
+  filter: blur(4px);
 }
 .topbar {
-  background: rgba(6, 6, 6, 0.9);
+  background: rgba(6, 6, 6, 0.5);
   border-bottom-color: #676767;
 }
 .brand-mark {
@@ -1053,15 +1029,7 @@ body::before {
     text-shadow: 0 0 12px rgba(255, 255, 255, 0.8);
   }
   100% {
-    background: linear-gradient(
-      90deg,
-      color-mix(
-        in srgb,
-        var(--highlight-color, var(--warning)) 18%,
-        transparent
-      ),
-      transparent
-    );
+    background: rgba(255, 255, 255, 0);
     color: #fff;
     text-shadow: none;
   }
@@ -1092,7 +1060,7 @@ body::before {
   border-left-color: var(--warning);
 }
 .document th {
-  background: #1c1c1c;
+  background: rgba(8, 8, 8, 0.25);;
 }
 .document th,
 .document td {
