@@ -434,7 +434,7 @@
     document.getElementById("progress-bar").style.transform =
       "scaleX(" + progress + ")";
     document.getElementById("progress-label").textContent =
-      Math.round(progress * 100) + "% read";
+      Math.round(progress * 100) + "% READ";
     document
       .getElementById("back-to-top")
       .classList.toggle("visible", window.scrollY > 500);

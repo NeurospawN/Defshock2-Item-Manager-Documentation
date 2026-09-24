@@ -58,15 +58,13 @@ a {
 }
 .topbar {
   align-items: center;
-  background: color-mix(in srgb, var(--bg) 92%, transparent);
-  border-bottom: 1px solid var(--border);
+  background: color-mix(in srgb, var(--bg) 100%, transparent);
   display: flex;
   height: 72px;
   justify-content: space-between;
   padding: 0 34px;
   position: sticky;
   top: 0;
-  z-index: 10;
   backdrop-filter: blur(16px);
 }
 .brand {
@@ -229,16 +227,15 @@ a {
 }
 .reading-progress {
   background: var(--border);
-  height: 2px;
+  height: 1px;
   position: absolute;
   right: 0;
-  top: -42px;
   width: 100%;
 }
 .reading-progress span {
   background: var(--accent);
   display: block;
-  height: 100%;
+  height: 98%;
   transform: scaleX(0);
   transform-origin: left;
   transition: transform 0.1s linear;
@@ -507,7 +504,7 @@ a {
 }
 @media (max-width: 800px) {
   .topbar {
-    height: 100px;
+    height: 76px;
     padding: 0 16px;
   }
   .search-box {
@@ -537,9 +534,6 @@ a {
   }
   .sidebar .outline {
     max-height: 35vh;
-  }
-  .reading-progress {
-    top: -20px;
   }
   .document-header {
     padding-top: 28px;
@@ -714,7 +708,6 @@ body::before {
   height: 76px;
   backdrop-filter: blur(18px);
 }
-.topbar,
 .app-layout {
   position: relative;
   z-index: 1;
@@ -853,11 +846,11 @@ body::before {
 /* Keep navigation feedback visible while the document moves underneath it. */
 .reading-progress {
   background: rgba(85, 85, 85, 0.72);
-  height: 3px;
+  height: 1px;
   left: 0;
   position: fixed;
   right: auto;
-  top: 0;
+  top: 74px;
   width: 100vw;
   z-index: 50;
 }
@@ -975,7 +968,6 @@ body::before {
 }
 .topbar {
   background: rgba(6, 6, 6, 0.5);
-  border-bottom-color: #676767;
 }
 .brand-mark {
   color: #111;
