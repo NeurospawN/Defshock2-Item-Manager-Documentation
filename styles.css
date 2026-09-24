@@ -688,6 +688,7 @@ body.light-theme {
 body {
   letter-spacing: 0.025em;
   position: relative;
+  overscroll-behavior: none;
 }
 body::before {
   content: "";
