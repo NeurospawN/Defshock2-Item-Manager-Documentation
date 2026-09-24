@@ -507,7 +507,7 @@ a {
 }
 @media (max-width: 800px) {
   .topbar {
-    height: 62px;
+    height: 100px;
     padding: 0 16px;
   }
   .search-box {
