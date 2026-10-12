@@ -912,6 +912,12 @@ return {
     removeTargets = {                -- Parts on the weapon to hide when this is attached
         "MagModel", "E1", "E2"
     },
+    additionalWelds = {               -- Optional extra attachment-to-weapon welds
+        { sourcePart = "GripPart", targetPart = "GripMount" },
+    },
+    blacklist = {                     -- Optional names of incompatible attachments
+        "Suppressor",
+    },
     upgradeSettings = function(toolSettings)
         -- Receives the current toolSettings table
         -- Returns a table of settings to override
@@ -933,10 +939,15 @@ return {
    - Looks up the attachment in `ReplicatedStorage.WeaponAttachments/[WeaponName]/[AttachmentName]`
    - Validates compatibility via `attachmentInfo.weapon`
    - Removes any existing attachment of the same type
-   - Clones the attachment model, welds it to the weapon's `RootPart` (or `customRootPart`)
+    - Clones the attachment model and welds its `RootPart` to the weapon's `RootPart` (or `customRootPart`)
+    - Applies optional `additionalWelds` entries by aligning each source part to its weapon target and welding them together
    - Hides conflicting parts listed in `removeTargets` (sets Transparency=1, adds `HiddenByAttachment` attribute)
    - Creates a new ModuleScript child on the weapon named `[type]Attachment` with the `attachmentData` tag
    - Stores a reference to the original AttachmentData in an `AttachmentRef` ObjectValue
+
+3. **WeaponsBenchHandler** also uses `additionalWelds` while previewing an attachment. It positions and reparents the extra source parts like the loader, then creates temporary preview welds. When the preview is removed, it deletes all `PreviewAttachmentWeld` instances and their source parts.
+
+4. The attachment dropdown hides combinations disallowed by `blacklist`. Server-side save validation also removes conflicting entries, so clients cannot bypass the rule by sending incompatible attachment data directly.
 
 2. **ItemManager's `checkForUpgrades()`** runs during equip:
    - Iterates through weapon children looking for `attachmentData` or `modificationSettings` tags
@@ -978,6 +989,95 @@ return {
 ```
 
 **3. The attachment is now available.** The WeaponCustomizationLoader will handle welding it to the weapon when applied.
+
+### Multi-Object Attachments (`additionalWelds`)
+
+Use `additionalWelds` when an attachment contains parts that must connect to different locations on the weapon, such as a grip that also connects to a rail. The normal `RootPart` weld still applies; each entry adds another weld.
+
+```luau
+return {
+    attachmentInfo = {
+        description = "Quad rail handguard with integrated vertical grip",
+        weapon = "AKM",
+        type = "Handguard",
+        playerLevelNeeded = 5,
+    },
+    removeTargets = { "Handguard", "Grip" },
+    additionalWelds = {
+        { sourcePart = "GripPart", targetPart = "GripMount" },
+        { sourcePart = "RailPart", targetPart = "BarrelNut" },
+    },
+    upgradeSettings = function(toolSettings)
+        return {
+            firingRecoilScale = (toolSettings.firingRecoilScale or 1) * 0.9,
+        }
+    end,
+}
+```
+
+Each entry has two required string fields:
+
+- `sourcePart` is the name of a `BasePart` inside the attachment model. Nested parts are supported through recursive descendant lookup.
+- `targetPart` is the name of a `BasePart` descendant of the weapon model.
+
+At runtime, the source part is aligned to the target part's `CFrame`, moved under the weapon model, and joined to the target with a `Weld`. The attachment model must contain its main `RootPart`; every source and target part must exist. Ensure all welded parts are unanchored (`Anchored = false`) at runtime. The bench preview follows the same additional-weld configuration and cleans up its temporary welds and source parts when the preview is removed.
+
+### Attachment Blacklists
+
+Use `blacklist` to prevent attachments that are physically or functionally incompatible from being equipped together:
+
+```luau
+return {
+    attachmentInfo = {
+        description = "Long barrel, increases range but blocks suppressors",
+        weapon = "AKM",
+        type = "Barrel",
+        playerLevelNeeded = 10,
+    },
+    removeTargets = { "Barrel" },
+    blacklist = {
+        "Suppressor",
+        "Short Barrel",
+    },
+    upgradeSettings = function(toolSettings)
+        return {
+            firingRange = (toolSettings.firingRange or 100) * 1.5,
+        }
+    end,
+}
+```
+
+Blacklist entries are exact attachment **model names** under `ReplicatedStorage.WeaponAttachments.[WeaponName]`, not attachment `type` values. The rule is bidirectional: if `Long Barrel` lists `Suppressor`, equipping either one prevents the other from appearing in the dropdown. The current attachment's own name is ignored, so self-blacklisting has no effect. Blacklisted options are hidden, while the existing same-`type` slot restriction continues to work independently.
+
+The bench checks both the candidate's blacklist and blacklists declared by already-equipped attachments. The server also validates saved loadouts and strips conflicting attachments from save data, preventing a client from bypassing the dropdown restriction with a direct remote request.
+
+### Attachment Data Schema Reference
+
+```luau
+return {
+    attachmentInfo = {
+        description = "Text shown on hover in the customization bench",
+        weapon = "WeaponFolderName", -- Optional weapon restriction
+        type = "muzzle", -- Category; prevents same-type stacking
+        customRootPart = "PartName", -- Optional main weld target
+        playerLevelNeeded = 5, -- Optional; defaults to 1
+    },
+    removeTargets = { "PartName1", "PartName2" }, -- Optional weapon parts to hide
+    additionalWelds = { -- Optional extra weld points
+        { sourcePart = "AttachmentPartName", targetPart = "WeaponPartName" },
+    },
+    blacklist = { -- Optional incompatible attachment model names
+        "OtherAttachmentName1",
+        "OtherAttachmentName2",
+    },
+    upgradeSettings = function(toolSettings)
+        -- Return the settings that should be changed.
+        return {
+            someSetting = newValue,
+        }
+    end,
+}
+```
 
 ### Attachment Types
 
